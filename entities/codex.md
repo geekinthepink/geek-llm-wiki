@@ -44,4 +44,3 @@ Codex 是 OpenAI 的 AI 编码 Agent，基于 GPT-5 等模型驱动。能够端�
 ## 相关实体
 
 - [[harness-engineering]] — OpenAI 的 Agent 优先工程方法论
-- [[agent]] — AI Agent 系统总览

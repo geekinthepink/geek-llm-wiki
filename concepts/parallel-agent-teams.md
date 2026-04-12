@@ -162,4 +162,3 @@ Parallel Agent Teams 建立在 [[anthropic-agent-harness]] 的核心方法之上
 - [[anthropic-agent-harness]] — Anthropic 的 Agent 执行框架方法论
 - [[claude-code]] — Anthropic 的编码 Agent
 - [[harness-engineering]] — 以 Agent 为核心的软件工程范式
-- [[multi-agent]] — 多 Agent 协作系统

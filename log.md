@@ -70,3 +70,22 @@
 ## [2026-04-12] update | index.md
 - Added 2 new concepts: generator-evaluator-loop, sprint-contract
 - Updated total pages count to 8
+
+## [2026-04-12] ingest | Geoffrey Huntley "everything is a ralph loop"
+- Source: https://ghuntley.com/loop/
+- Author: Geoffrey Huntley, 2026-01-17
+- Raw saved: raw/articles/geoffrey-huntley-everything-is-ralph-loop-2026-01-17.md (translated to Chinese)
+- Concept created: concepts/ralph-loop-philosophy.md
+- Tags: agent, architecture, tools
+
+## [2026-04-12] lint | Wiki health check — 0 issues found
+- Fixed 8 broken wikilinks:
+  - anthropic-agent-harness.md: replaced 2 raw-article wikilinks with markdown links
+  - claude-code.md: replaced 2 raw-article wikilinks with markdown links
+  - codex.md: removed [[agent]] broken link (page doesn't exist yet)
+  - harness-engineering.md: removed [[agent]] and [[evaluation]] broken links
+  - parallel-agent-teams.md: removed [[multi-agent]] broken link
+- Fixed tag extraction regex (multi-agent now correctly recognized)
+- All 8 pages pass frontmatter validation
+- All tags in taxonomy
+- No orphan pages, no index gaps, no pages over 200 lines

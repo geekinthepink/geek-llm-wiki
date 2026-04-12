@@ -54,7 +54,7 @@ Claude Code 支持多种 Claude 模型：
 
 ### claude.ai 克隆项目
 
-在 [[anthropic-effective-harnesses-for-long-running-agents-2025-11-26]] 中描述的 Web 应用克隆项目：
+在 Anthropic [长期运行 Agent 的有效 Harness](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) 中描述的 Web 应用克隆项目：
 
 - 使用初始化 Agent + 编码 Agent 双阶段架构
 - 展开超过 200 个功能需求
@@ -63,7 +63,7 @@ Claude Code 支持多种 Claude 模型：
 
 ### C 编译器项目
 
-在 [[anthropic-building-c-compiler-parallel-claudes-2026-02-05]] 中的 C 编译器项目：
+在 Anthropic [用并行 Claudes 构建 C 编译器](https://www.anthropic.com/engineering/building-c-compiler) 中的 C 编译器项目：
 
 - 16 个 Claude 实例并行工作
 - ~2,000 个 Claude Code 会话

@@ -111,5 +111,3 @@ Harness Engineering 是一种以 AI Agent 为核心的软件工程范式。人�
 ## 相关概念
 
 - [[codex]] — OpenAI 的编码 Agent
-- [[agent]] — AI Agent 系统总览
-- [[evaluation]] — Agent 评测方法

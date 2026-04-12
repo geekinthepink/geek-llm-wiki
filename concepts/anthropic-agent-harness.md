@@ -17,7 +17,7 @@ Anthropic Agent Harness 是 Anthropic 工程团队在长期运行 AI Agent 的�
 
 ## 核心架构：初始化 + 编码双 Agent 模式
 
-来自 [[anthropic-effective-harnesses-for-long-running-agents-2025-11-26]] 的两阶段设计：
+来自 Anthropic [长期运行 Agent 的有效 Harness](../raw/articles/anthropic-effective-harnesses-for-long-running-agents-2025-11-26.md) 的两阶段设计：
 
 ### 1. 初始化 Agent（Initializer Agent）
 
@@ -54,7 +54,7 @@ Anthropic Agent Harness 是 Anthropic 工程团队在长期运行 AI Agent 的�
 
 ## Ralph-loop：无限循环模式
 
-来自 [[anthropic-building-c-compiler-parallel-claudes-2026-02-05]] 的简单循环 harness：
+来自 Anthropic [用并行 Claudes 构建 C 编译器](https://www.anthropic.com/engineering/building-c-compiler) 的简单循环 harness：
 
 ```bash
 #!/bin/bash
