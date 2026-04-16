@@ -89,3 +89,26 @@
 - All 8 pages pass frontmatter validation
 - All tags in taxonomy
 - No orphan pages, no index gaps, no pages over 200 lines
+
+## [2026-04-16] lint | Wiki health check — 3 issues found
+- Structural issues:
+  - Orphan page: concepts/ralph-loop-philosophy.md (no inbound wikilinks)
+  - entities/codex.md has only 1 valid outbound wikilink
+  - concepts/harness-engineering.md has only 1 valid outbound wikilink
+- No broken wikilinks, no index gaps, no frontmatter issues, no unknown tags, no missing sources, no oversized pages
+
+## [2026-04-16] ingest | Hermes skill implementation analysis
+- Source: internal session analysis / code reading
+- Session: 20260415_104848_cfaec570
+- Raw saved: raw/articles/hermes-skill-implementation-analysis-2026-04-15.md
+- Diagram saved: assets/diagrams/hermes-skill-sequence-2026-04-16.svg, assets/diagrams/hermes-skill-sequence-2026-04-16.png
+- Concept created: concepts/hermes-skill-implementation.md
+- Tags: agent, tools, planning
+
+## [2026-04-16] update | index.md
+- Added 1 new concept: hermes-skill-implementation
+- Updated total pages count to 10
+
+## [2026-04-16] update | cross-links for hermes-skill-implementation
+- Updated concepts/harness-engineering.md to link Hermes skill page
+- Updated concepts/anthropic-agent-harness.md to compare against Hermes skill loading model

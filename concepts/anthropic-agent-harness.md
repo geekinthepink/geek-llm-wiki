@@ -122,7 +122,7 @@ Agent 通过以下机制在会话间传递状态：
 
 ## 与 OpenAI Harness Engineering 的对比
 
-Anthropic 的方法与 OpenAI 的 [[harness-engineering]] 有显著差异：
+Anthropic 的方法与 OpenAI 的 [[harness-engineering]] 有显著差异。相比之下，[[hermes-skill-implementation]] 更进一步把任务知识模块化为独立 skill，并通过 `skills_list()` / `skill_view()` 做渐进式加载：
 
 | 维度 | Anthropic | OpenAI |
 |------|-----------|--------|

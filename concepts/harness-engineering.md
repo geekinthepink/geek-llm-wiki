@@ -111,3 +111,4 @@ Harness Engineering 是一种以 AI Agent 为核心的软件工程范式。人�
 ## 相关概念
 
 - [[codex]] — OpenAI 的编码 Agent
+- [[hermes-skill-implementation]] — Hermes 把任务级知识封装为可索引、按需加载的 skill 体系
