@@ -1,0 +1,64 @@
+name: Deploy Book to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install mdBook
+        run: cargo install mdbook --no-default-features --features search --vers "^0.4" --locked
+
+      - name: Build books
+        run: |
+          rm -rf dist
+          mdbook build book
+          mdbook build book-en
+          mkdir -p dist/en
+          cp -R book/book/. dist/
+          cp -R book-en/book/. dist/en/
+          npx --yes pagefind@latest --site dist
+          touch dist/.nojekyll
+
+      - name: Chapter quality check
+        run: bash scripts/check-chapter-quality.sh
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

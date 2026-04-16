@@ -2,7 +2,7 @@
 
 > 内容目录。每个知识页按类型归类，附一行摘要。
 > 查找相关内容请先看这里。
-> Last updated: 2026-04-16 | Total pages: 10
+> Last updated: 2026-04-16 | Total pages: 11
 
 ## Entities
 
@@ -26,4 +26,4 @@
 
 ## Queries
 
-<!-- 暂无条目 -->
+- [[harness-engineering-book-reading-index]] — 《驾驭工程》本地阅读索引，串起源码书稿入口、推荐阅读路径与后续笔记同步节奏

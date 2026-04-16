@@ -1,0 +1,429 @@
+# 附录 E：版本演化记录
+
+本书核心分析基于 Claude Code v2.1.88（含完整 source map，可还原 4,756 个源文件）。本附录记录后续版本的关键变化及其对各章节的影响。
+
+> **导航提示**：每条变化链接到对应章节的版本演化小节，点击章节编号可跳转。
+
+> 由于 v2.1.89 起 Anthropic 移除了 source map 分发，以下分析基于 bundle 字符串信号对比 + v2.1.88 源码辅助推断，深度有限。
+
+## v2.1.88 → v2.1.91
+
+**概览**：cli.js +115KB | Tengu 事件 +39/-6 | 环境变量 +8/-3 | Source Map 移除
+
+### 高影响变化
+
+| 变化 | 影响章节 | 详情 |
+|------|---------|------|
+| Tree-sitter WASM 移除 | [ch16 权限系统](../part5/ch16.md#版本演化v2191-变化) | Bash 安全从 AST 分析退回 regex/shell-quote；因 CC-643 性能问题 |
+| `"auto"` 权限模式正式化 | [ch16](../part5/ch16.md#版本演化v2191-变化)-[ch17](../part5/ch17.md#版本演化v2191-变化) 权限/YOLO | SDK 公开 API 新增 auto mode |
+| 冷压缩 + 对话框 + 快速回填熔断 | [ch11 微压缩](../part3/ch11.md#版本演化v2191-变化) | 新增延迟压缩策略和用户确认 UI |
+
+### 中影响变化
+
+| 变化 | 影响章节 | 详情 |
+|------|---------|------|
+| `staleReadFileStateHint` | [ch09](../part3/ch09.md#版本演化v2191-变化)-[ch10](../part3/ch10.md#版本演化v2191-变化) 上下文管理 | 工具执行期间文件 mtime 变化检测 |
+| Ultraplan 远程多代理规划 | [ch20 Agent 集群](../part6/ch20.md) | CCR 远程会话 + Opus 4.6 + 30min 超时 |
+| 子代理增强 | [ch20](../part6/ch20.md)-[ch21](../part6/ch21.md#版本演化v2191-变化) 多代理/Effort | 回合限制、精简 schema、成本引导 |
+
+### 低影响变化
+
+| 变化 | 影响章节 |
+|------|---------|
+| `hook_output_persisted` + `pre_tool_hook_deferred` | ch19 Hooks |
+| `memory_toggled` + `extract_memories_skipped_no_prose` | ch12 Token 预算 |
+| `rate_limit_lever_hint` | ch06 提示词行为引导 |
+| `bridge_client_presence_enabled` | ch22 技能系统 |
+| +8/-3 环境变量 | 附录 B |
+
+### v2.1.91 新功能详解
+
+以下三个功能在 v2.1.88 源码中**完全不存在**，是 v2.1.91 新增的。分析基于 v2.1.91 bundle 逆向。
+
+#### 1. Powerup Lessons — 交互式功能教程系统
+
+**事件**：`tengu_powerup_lesson_opened`、`tengu_powerup_lesson_completed`
+
+**v2.1.88 状态**：不存在。`restored-src/src/` 中无任何 powerup 或 lesson 相关代码。
+
+**v2.1.91 逆向发现**：
+
+Powerup Lessons 是一个内置的交互式教程系统，包含 10 个课程模块，教用户如何使用 Claude Code 的核心功能。从 bundle 中提取到完整的课程注册表：
+
+| 课程 ID | 标题 | 涉及功能 |
+|---------|------|---------|
+| `at-mentions` | Talk to your codebase | @ 文件引用、行号引用 |
+| `modes` | Steer with modes | Shift+Tab 模式切换、plan、auto |
+| `undo` | Undo anything | `/rewind`、Esc-Esc |
+| `background` | Run in the background | 后台任务、`/tasks` |
+| `memory` | Teach Claude your rules | CLAUDE.md、`/memory`、`/init` |
+| `mcp` | Extend with tools | MCP 服务器、`/mcp` |
+| `automate` | Automate your workflow | Skills、Hooks、`/hooks` |
+| `subagents` | Multiply yourself | 子代理、`/agents`、`--worktree` |
+| `cross-device` | Code from anywhere | `/remote-control`、`/teleport` |
+| `model-dial` | Dial the model | `/model`、`/effort`、`/fast` |
+
+**技术实现**（从 bundle 逆向）：
+
+```javascript
+// 课程打开事件
+logEvent("tengu_powerup_lesson_opened", {
+  lesson_id: lesson.id,           // 课程 ID
+  was_already_unlocked: unlocked.has(lesson.id),  // 是否已解锁
+  unlocked_count: unlocked.size   // 已解锁总数
+})
+
+// 课程完成事件
+logEvent("tengu_powerup_lesson_completed", {
+  lesson_id: id,
+  unlocked_count: newUnlocked.size,
+  all_unlocked: newUnlocked.size === lessons.length  // 是否全部完成
+})
+```
+
+解锁状态通过 `powerupsUnlocked` 持久化到用户配置中。每个课程包含标题、标语（tagline）、富文本内容（含终端动画演示），UI 使用 ✓/○ 标记完成状态，全部完成后触发"彩蛋"动画。
+
+**本书关联**：Powerup Lessons 的 10 个课程模块几乎覆盖了本书第二到六篇的所有核心主题——从权限模式（ch16-17）到子代理（ch20）到 MCP（ch22）。它是 Anthropic 官方对"用户应该掌握哪些功能"的优先级排序，可作为本书"用户能做什么"小节的参考。
+
+---
+
+#### 2. Write Append Mode — 文件追加写入
+
+**事件**：`tengu_write_append_used`
+
+**v2.1.88 状态**：不存在。v2.1.88 的 Write 工具只支持 overwrite（完整覆盖）模式。
+
+**v2.1.91 逆向发现**：
+
+Write 工具的 inputSchema 新增了 `mode` 参数：
+
+```typescript
+// v2.1.91 bundle 逆向
+inputSchema: {
+  file_path: string,
+  content: string,
+  mode: "overwrite" | "append"  // v2.1.91 新增
+}
+```
+
+`mode` 参数描述（从 bundle 提取）：
+
+> Write mode. 'overwrite' (default) replaces the file. Use 'append' to add content to the end of an existing file instead of rewriting the full content — e.g. for logs, accumulating output, or adding entries to a list.
+
+**Feature Gate**：append mode 受 GrowthBook flag `tengu_maple_forge_w8k` 控制。当 flag 关闭时，schema 中的 `mode` 字段被 `.omit()` 移除，模型看不到该参数。
+
+```javascript
+// v2.1.91 bundle 逆向
+function getWriteSchema() {
+  return getFeatureValue("tengu_maple_forge_w8k", false)
+    ? fullSchema()           // 包含 mode 参数
+    : fullSchema().omit({ mode: true })  // 隐藏 mode 参数
+}
+```
+
+**本书关联**：影响 ch02（工具系统概览）和 ch08（工具提示词）。v2.1.88 中 Write 工具的提示词明确说"This tool will overwrite the existing file"——v2.1.91 的 append 模式改变了这个约束，模型现在可以选择追加而非覆盖。
+
+---
+
+#### 3. Message Rating — 消息评分反馈
+
+**事件**：`tengu_message_rated`
+
+**v2.1.88 状态**：不存在。v2.1.88 有 `tengu_feedback_survey_*` 系列事件（会话级反馈），但没有消息级别的评分。
+
+**v2.1.91 逆向发现**：
+
+Message Rating 是一个消息级别的用户反馈机制，允许用户对单条 Claude 回复进行评分。从 bundle 逆向提取到的实现：
+
+```javascript
+// v2.1.91 bundle 逆向
+function rateMessage(messageUuid, sentiment) {
+  const wasAlreadyRated = ratings.get(messageUuid) === sentiment
+  // 再次点击同一评分 → 清除（toggle 行为）
+  if (wasAlreadyRated) {
+    ratings.delete(messageUuid)
+  } else {
+    ratings.set(messageUuid, sentiment)
+  }
+
+  logEvent("tengu_message_rated", {
+    message_uuid: messageUuid,  // 消息唯一 ID
+    sentiment: sentiment,       // 评分方向（如 thumbs_up/thumbs_down）
+    cleared: wasAlreadyRated    // 是否为取消评分
+  })
+
+  // 评分后显示感谢通知
+  if (!wasAlreadyRated) {
+    addNotification({
+      key: "message-rated",
+      text: "thanks for improving claude!",
+      color: "success",
+      priority: "immediate"
+    })
+  }
+}
+```
+
+**UI 机制**：
+- 通过 React Context（`MessageRatingProvider`）在消息列表中注入评分功能
+- 评分状态以 `Map<messageUuid, sentiment>` 存储在内存中
+- 支持 toggle——再次点击同一评分会清除
+- 评分后弹出绿色通知"thanks for improving claude!"
+
+**本书关联**：与 ch29（可观测性工程）相关。v2.1.88 的反馈系统是会话级的（`tengu_feedback_survey_*`），v2.1.91 新增消息级评分，将反馈粒度从"整个会话好不好"细化到"这条回复好不好"。这为 Anthropic 的 RLHF（人类反馈强化学习）提供了更细粒度的训练信号。
+
+---
+
+### 实验代码名事件
+
+以下带随机代码名的事件属于 A/B 测试，用途未公开：
+
+| 事件 | 备注 |
+|------|------|
+| `tengu_garnet_plover` | 未知实验 |
+| `tengu_gleaming_fair` | 未知实验 |
+| `tengu_gypsum_kite` | 未知实验 |
+| `tengu_slate_finch` | 未知实验 |
+| `tengu_slate_reef` | 未知实验 |
+| `tengu_willow_prism` | 未知实验 |
+| `tengu_maple_forge_w` | 与 Write Append mode 的 feature gate `tengu_maple_forge_w8k` 相关 |
+| `tengu_lean_sub_pf` | 可能与子代理精简 schema 相关 |
+| `tengu_sub_nomdrep_q` | 可能与子代理行为相关 |
+| `tengu_noreread_q` | 可能与 `tengu_file_read_reread` 文件重读跳过相关 |
+
+---
+
+## v2.1.91 → v2.1.92（增量变化）
+
+> 基于 v2.1.91 与 v2.1.92 bundle 信号差异提取。完整对比报告见 `docs/version-diffs/v2.1.88-vs-v2.1.92.md`。
+
+### 概览
+
+| 指标 | v2.1.91 | v2.1.92 | 增量 |
+|------|---------|---------|------|
+| cli.js 大小 | 12.5MB | 12.6MB | +59KB |
+| Tengu 事件 | 860 | 857 | +19 / -21（净 -3） |
+| 环境变量 | 183 | 186 | +3 |
+| seccomp 二进制 | 无 | arm64 + x64 | **新增** |
+
+### 关键新增
+
+| 子系统 | 新增信号 | 影响章节 | 分析 |
+|--------|---------|---------|------|
+| **工具** | `advisor_command`, `advisor_dialog_shown` + 10 个 advisor_* 标识符 | ch04 | 全新 AdvisorTool——第一个非执行类工具，有独立模型调用链 |
+| **工具** | `tool_result_dedup` | ch04 | 工具结果去重，与 v2.1.91 的 `file_read_reread` 构成输入/输出双侧去重 |
+| **安全** | `vendor/seccomp/{arm64,x64}/apply-seccomp` | ch16 | 系统层 seccomp 沙箱，替代 v2.1.91 移除的 tree-sitter 应用层分析 |
+| **Hook** | `stop_hook_added`, `stop_hook_command`, `stop_hook_removed` | ch18 | Stop Hook 运行时动态添加/移除——Hook 系统首次支持运行时管理 |
+| **认证** | `bedrock_setup_started/complete/cancelled`, `oauth_bedrock_wizard_launched` | ch05 | AWS Bedrock 引导式设置向导 |
+| **认证** | `oauth_platform_docs_opened` | ch05 | OAuth 流程中打开平台文档 |
+| **工具** | `bash_rerun_used` | ch04 | Bash 命令重跑功能 |
+| **模型** | `rate_limit_options_menu_select_team` | — | 限速时的 Team 选项 |
+
+### 关键移除
+
+| 移除信号 | 分析 |
+|---------|------|
+| `session_tagged`, `tag_command_*`（5 个） | Session 标签系统被完全移除 |
+| `sm_compact` | 旧压缩事件被清理（v2.1.91 已引入 cold_compact 替代） |
+| `skill_improvement_survey` | 技能改进调查结束 |
+| `pid_based_version_locking` | PID 版本锁机制移除 |
+| `compact_streaming_retry` | 压缩流式重试被清理 |
+| `ultraplan_model` | Ultraplan 模型事件重构 |
+| 6 个随机代码名实验事件 | 旧 A/B 测试结束（cobalt_frost, copper_bridge 等） |
+
+### 新增环境变量
+
+| 变量 | 用途 |
+|------|------|
+| `CLAUDE_CODE_EXECPATH` | 可执行文件路径 |
+| `CLAUDE_CODE_SIMULATE_PROXY_USAGE` | 代理使用模拟（测试用） |
+| `CLAUDE_CODE_SKIP_FAST_MODE_ORG_CHECK` | 跳过 Fast Mode 组织级检查 |
+
+### 设计趋势
+
+v2.1.91→v2.1.92 的增量较小但方向明确：
+
+1. **安全策略从应用层下沉到系统层**（tree-sitter → seccomp）
+2. **工具体系从纯执行扩展到建议**（AdvisorTool）
+3. **配置管理从纯静态走向运行时可变**（Stop Hook 动态管理）
+4. **企业接入门槛持续降低**（Bedrock 向导化）
+
+---
+
+*使用 `scripts/cc-version-diff.sh` 生成差异数据，`docs/anchor-points.md` 提供子系统锚点定位*
+
+---
+
+## v2.1.92 → v2.1.100
+
+**概览**：cli.js +870KB (+6.9%) | Tengu 事件 +45/-21（净 +24）| 环境变量 +8/-2 | 新增 audio-capture vendor
+
+### 高影响变化
+
+| 变化 | 影响章节 | 详情 |
+|------|---------|------|
+| Dream 系统成熟化 | ch24 记忆系统 | kairos_dream 定时调度 + auto_dream_skipped 可观测性 + dream_invoked 手动触发追踪 |
+| Bedrock/Vertex 完整向导 | ch06b API 通信层 | 18 个事件覆盖设置、探测、升级完整生命周期 |
+| Tool Result Dedup | ch10 文件状态保留 | 工具结果去重，短 ID 引用节省上下文 |
+| Bridge REPL 事件大规模清理 | ch06b API 通信层 | 16 个 bridge_repl_* 事件移除（少量残留引用），暗示 IDE 桥接通信机制重构 |
+| toolStats 统计字段 | ch24 记忆系统 | sdk-tools.d.ts 新增 7 维度工具使用统计 |
+
+### 中影响变化
+
+| 变化 | 影响章节 | 详情 |
+|------|---------|------|
+| Advisor 工具 | ch21 Effort/Thinking | 服务端强模型审阅工具，feature gate `advisor-tool-2026-03-01` |
+| Autofix PR | ch20c Ultraplan | 远程会话自动修复 PR，与 ultraplan/ultrareview 并列 |
+| Team Onboarding | ch20b Teams | 使用报告生成 + 入门引导发现 |
+| Mantle 认证后端 | ch06b API 通信层, 附录 G | 第五种 API 认证通道 |
+| 冷压缩增强 | ch09 自动压缩 | Feature Flag 驱动 + MAX_CONTEXT_TOKENS 覆盖 |
+
+### 低影响变化
+
+| 变化 | 影响章节 |
+|------|---------|
+| `hook_prompt_transcript_truncated` + stop_hook 生命周期 | ch18 Hooks |
+| Perforce 版本控制支持 (`CLAUDE_CODE_PERFORCE_MODE`) | ch04 工具 |
+| audio-capture vendor 二进制（6 平台） | 潜在新功能 |
+| `image_resize` — 图片自动缩放 | ch04 工具 |
+| `bash_allowlist_strip_all` — bash 白名单操作 | ch16 权限 |
+| +8/-2 环境变量 | 附录 B |
+| 12+ 新实验代号事件 | ch23 Feature Flag |
+
+### v2.1.100 新功能详解
+
+以下功能在 v2.1.92 中**不存在**或仅有雏形，是 v2.1.92→v2.1.100 增量新增的。
+
+#### 1. Kairos Dream — 后台定时记忆整合
+
+**事件**：`tengu_kairos_dream`
+
+**v2.1.92 状态**：v2.1.92 已有 `auto_dream` 和 `/dream` 手动触发，但无后台定时调度。
+
+**v2.1.100 新增**：
+
+Kairos Dream 是 Dream 系统的第三种触发模式——通过 cron 调度在后台自动执行记忆整合，无需等待用户启动新会话。从 bundle 中提取到的 cron 表达式生成：
+
+```javascript
+// v2.1.100 bundle 逆向
+function P_A() {
+  let q = Math.floor(Math.random() * 360);
+  return `${q % 60} ${Math.floor(q / 60)} * * *`;
+  // 随机分钟+小时偏移，避免多用户同时触发
+}
+```
+
+配合 `auto_dream_skipped` 事件的 `reason` 字段（"sessions"/"lock"），Kairos Dream 实现了完整的后台记忆整合生命周期。
+
+**本书关联**：ch24 已更新 Dream 系统分析（三级触发矩阵），ch29 可观测性章节可引用 `auto_dream_skipped` 的跳过原因分布作为可观测性设计案例。
+
+---
+
+#### 2. Bedrock/Vertex 模型升级向导
+
+**事件**：18 个事件（Bedrock 9 个 + Vertex 9 个），结构对称
+
+**v2.1.92 状态**：v2.1.92 只有 Bedrock 的 `setup_started/complete/cancelled`（3 个事件）。
+
+**v2.1.100 新增**：
+
+完整的模型升级检测和自动切换机制。设计要点：
+
+1. **未固定模型检测**：扫描用户配置，找出未通过环境变量显式固定的模型层级
+2. **可用性探测**：`probeBedrockModel` / `probeVertexModel` 验证新模型在用户账户中是否可用
+3. **用户确认**：升级不自动执行，需要用户 accept/decline
+4. **持久化拒绝**：declined 升级记录在用户设置中，不会反复提示
+5. **默认回退**：当默认模型不可用时，自动 fallback 到同层级备选
+
+Vertex 向导（`vertex_setup_started` 等）是 v2.1.100 新增的，v2.1.92 中 Vertex 无交互式设置。
+
+**本书关联**：ch06b 已更新 Bedrock/Vertex 向导分析。附录 G（认证系统）可引用 Mantle 认证后端。
+
+---
+
+#### 3. Autofix PR — 远程自动修复
+
+**事件**：`tengu_autofix_pr_started`、`tengu_autofix_pr_result`
+
+**v2.1.92 状态**：不存在。v2.1.92 有 ultraplan 和 ultrareview，但无 autofix-pr。
+
+**v2.1.100 新增**：
+
+Autofix PR 是第四种远程代理任务类型，与 `remote-agent`、`ultraplan`、`ultrareview` 并列在 `XAY` 远程任务类型注册表中。从 bundle 中提取到的工作流：
+
+```javascript
+// v2.1.100 bundle 逆向
+// 远程任务类型注册
+XAY = ["remote-agent", "ultraplan", "ultrareview", "autofix-pr", "background-pr"];
+
+// Autofix PR 的启动
+d("tengu_autofix_pr_started", {});
+// ... 创建远程会话，重用 outcome 分支
+let b = await kt({
+  initialMessage: h,
+  source: "autofix_pr",
+  branchName: P,
+  reuseOutcomeBranch: P,
+  title: `Autofix PR: ${k}/${R}#${v} (${P})`
+});
+```
+
+Autofix PR 生成一个远程 Claude Code 会话，监控指定的 Pull Request 并自动修复问题（如 CI 失败、代码审查意见）。与 Ultraplan（规划）和 Ultrareview（审阅）不同，Autofix PR 聚焦于**执行修复**。
+
+注意 `background-pr` 也出现在任务类型列表中，暗示还有一种后台 PR 处理模式。
+
+**本书关联**：ch20c（Ultraplan）可扩展覆盖 Autofix PR 和 background-pr。
+
+---
+
+#### 4. Team Onboarding — 团队使用报告
+
+**事件**：`tengu_team_onboarding_invoked`、`tengu_team_onboarding_generated`、`tengu_team_onboarding_discovery_shown`
+
+**v2.1.92 状态**：不存在。
+
+**v2.1.100 新增**：
+
+团队入门报告生成器，收集用户的使用数据（会话数、slash 命令数、MCP 服务器数），按模板生成引导文档。从 bundle 中提取的关键参数：
+
+- `windowDays`：分析窗口（1-365 天）
+- `sessionCount`、`slashCommandCount`、`mcpServerCount`：使用统计维度
+- `GUIDE_TEMPLATE`、`USAGE_DATA`：报告模板变量
+
+`cedar_inlet` 实验事件控制团队入门引导的发现展示（`discovery_shown`），暗示这是一个 A/B 测试中的功能。
+
+---
+
+### 实验代码名事件
+
+以下带随机代码名的事件属于 A/B 测试，用途未公开：
+
+| 事件 | 状态 | 备注 |
+|------|------|------|
+| `tengu_amber_sentinel` | v2.1.100 新增 | — |
+| `tengu_basalt_kite` | v2.1.100 新增 | — |
+| `tengu_billiard_aviary` | v2.1.100 新增 | — |
+| `tengu_cedar_inlet` | v2.1.100 新增 | 与 Team Onboarding discovery 关联 |
+| `tengu_coral_beacon` | v2.1.100 新增 | — |
+| `tengu_flint_harbor` / `_prompt` / `_heron` | v2.1.100 新增 | 3 个相关事件 |
+| `tengu_garnet_loom` | v2.1.100 新增 | — |
+| `tengu_pyrite_wren` | v2.1.100 新增 | — |
+| `tengu_shale_finch` | v2.1.100 新增 | — |
+
+v2.1.92 中存在但在 v2.1.100 中移除的实验：`amber_lantern`、`editafterwrite_qpl`、`lean_sub_pf`、`maple_forge_w`、`relpath_gh`。
+
+---
+
+### 设计趋势
+
+v2.1.92→v2.1.100 的演化方向：
+
+1. **记忆系统从被动到主动**（auto_dream → kairos_dream 定时执行 + 可观测跳过原因）
+2. **云平台从配置到向导**（手动环境变量 → 交互式设置向导 + 自动模型升级检测）
+3. **IDE 桥接架构重构**（bridge_repl 完全移除，16 个事件清除——转向新通信机制）
+4. **远程代理家族扩展**（ultraplan/ultrareview → + autofix-pr + background-pr）
+5. **上下文优化精细化**（tool_result_dedup 减少重复 + MAX_CONTEXT_TOKENS 用户可控）
+
+---
+
+*使用 `scripts/cc-version-diff.sh` 生成差异数据，`docs/anchor-points.md` 提供子系统锚点定位*

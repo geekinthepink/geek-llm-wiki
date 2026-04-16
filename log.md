@@ -112,3 +112,13 @@
 ## [2026-04-16] update | cross-links for hermes-skill-implementation
 - Updated concepts/harness-engineering.md to link Hermes skill page
 - Updated concepts/anthropic-agent-harness.md to compare against Hermes skill loading model
+
+## [2026-04-16] create | queries/harness-engineering-book-reading-index.md
+- Type: query
+- Summary: 《驾驭工程》本地阅读索引，汇总源码书稿入口、推荐阅读路径，以及后续学习笔记同步方式
+- Sources: raw/books/harness-engineering-from-cc-to-ai-coding/book/src/SUMMARY.md, raw/books/harness-engineering-from-cc-to-ai-coding/book/src/preface.md
+- Tags: agent, tools, planning, tutorial
+
+## [2026-04-16] update | index.md
+- Added 1 new query: harness-engineering-book-reading-index
+- Updated total pages count to 11
