@@ -1,10 +1,10 @@
 ---
 title: Claude Code
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-25
 type: entity
 tags: [agent, tools]
-sources: [raw/articles/anthropic-effective-harnesses-for-long-running-agents-2025-11-26.md, raw/articles/anthropic-building-c-compiler-parallel-claudes-2026-02-05.md]
+sources: [raw/articles/anthropic-effective-harnesses-for-long-running-agents-2025-11-26.md, raw/articles/anthropic-building-c-compiler-parallel-claudes-2026-02-05.md, raw/articles/anthropic-code-execution-with-mcp-2025-11-04.md]
 ---
 
 # Claude Code
@@ -23,7 +23,7 @@ Claude Code 是一个通用的编码 Agent，能够：
 - 读写文件
 - 操作 git 仓库（commit、push、pull、merge）
 - 运行开发服务器
-- 通过 MCP（Model Context Protocol）服务器集成浏览器自动化工具（如 Puppeteer）
+- 通过 [[model-context-protocol]] 服务器集成浏览器自动化工具（如 Puppeteer）；在工具数量扩大时，可采用 [[mcp-code-execution]] 降低上下文消耗
 
 ### 上下文管理
 
@@ -94,9 +94,12 @@ Claude Code 作为 Agent 的执行引擎，与以下组件集成：
 - [[parallel-agent-teams]] — 使多个 Claude Code 实例并行协作的架构
 - [[codex]] — OpenAI 的编码 Agent，与 Claude Code 是竞争关系
 - [[harness-engineering]] — OpenAI 的 Agent 工程实践，与 Anthropic 的方法论形成对比
+- [[model-context-protocol]] — Claude Code 等 Agent 接入外部工具与数据的开放协议
+- [[mcp-code-execution]] — MCP 工具规模化后的上下文效率方案
 
 ## 参考来源
 
 - [Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) — Anthropic Engineering Blog, 2025-11-26
 - [Building a C compiler with a team of parallel Claudes](https://www.anthropic.com/engineering/building-c-compiler) — Anthropic Engineering Blog, 2026-02-05
+- [Code execution with MCP: Building more efficient agents](https://www.anthropic.com/engineering/code-execution-with-mcp) — Anthropic Engineering Blog, 2025-11-04
 - [GitHub: Claude's C Compiler](https://github.com/anthropics/claudes-c-compiler)

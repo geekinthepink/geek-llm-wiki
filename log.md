@@ -122,3 +122,20 @@
 ## [2026-04-16] update | index.md
 - Added 1 new query: harness-engineering-book-reading-index
 - Updated total pages count to 11
+
+## [2026-04-25] ingest | Anthropic code execution with MCP
+- Source: https://www.anthropic.com/engineering/code-execution-with-mcp
+- Author: Adam Jones, Conor Kelly, 2025-11-04
+- Raw saved: raw/articles/anthropic-code-execution-with-mcp-2025-11-04.md (translated to Chinese, with English source backup)
+- Concept created: concepts/mcp-code-execution.md
+- Entity created: entities/model-context-protocol.md
+- Tags: agent, tools, architecture
+
+## [2026-04-25] update | index.md
+- Added 1 entity: model-context-protocol
+- Added 1 concept: mcp-code-execution
+- Updated total pages count to 13
+
+## [2026-04-25] update | cross-links for MCP ingestion
+- Updated entities/claude-code.md to link model-context-protocol and mcp-code-execution
+- Updated entities/codex.md to add missing outbound wikilinks and relate MCP context-efficiency pattern to coding agents

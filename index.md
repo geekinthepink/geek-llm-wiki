@@ -2,13 +2,14 @@
 
 > 内容目录。每个知识页按类型归类，附一行摘要。
 > 查找相关内容请先看这里。
-> Last updated: 2026-04-16 | Total pages: 11
+> Last updated: 2026-04-25 | Total pages: 13
 
 ## Entities
 
 - [[codex]] — OpenAI 的 AI 编码 Agent，端到端软件开发
 - [[claude-code]] — Anthropic 的编码 Agent，支持长期运行与并行协作
 - [[anthropic-engineering-blog]] — Anthropic 工程博客，发布 Agent harness 实践经验
+- [[model-context-protocol]] — Anthropic 推出的 Agent 工具连接开放标准（MCP）
 
 ## Concepts
 
@@ -19,6 +20,7 @@
 - [[sprint-contract]] — 冲刺契约：Generator 与 Evaluator 协商"完成"标准，桥接高层规格与可测试实现
 - [[ralph-loop-philosophy]] — Geoffrey Huntley 的进化软件哲学：一切皆循环、单体架构优于微服务、软件工厂愿景
 - [[hermes-skill-implementation]] — Hermes 的 skill 实现原理：skills 索引注入、按需加载 `SKILL.md`、readiness 与 linked files
+- [[mcp-code-execution]] — Anthropic 的 MCP 代码执行模式：通过代码 API 按需调用工具，降低上下文成本
 
 ## Comparisons
 

@@ -1,10 +1,10 @@
 ---
 title: Codex (OpenAI)
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-25
 type: entity
 tags: [agent, tools]
-sources: [raw/articles/openai-harness-engineering-2026-02-11.md]
+sources: [raw/articles/openai-harness-engineering-2026-02-11.md, raw/articles/anthropic-code-execution-with-mcp-2025-11-04.md]
 ---
 
 # Codex (OpenAI)
@@ -44,3 +44,5 @@ Codex 是 OpenAI 的 AI 编码 Agent，基于 GPT-5 等模型驱动。能够端�
 ## 相关实体
 
 - [[harness-engineering]] — OpenAI 的 Agent 优先工程方法论
+- [[model-context-protocol]] — Codex 这类编码 Agent 也会通过 MCP/浏览器工具接口扩展外部操作能力
+- [[mcp-code-execution]] — 当工具数量和中间结果扩大时，可借鉴的上下文效率模式
