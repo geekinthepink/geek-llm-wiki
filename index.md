@@ -2,7 +2,7 @@
 
 > 内容目录。每个知识页按类型归类，附一行摘要。
 > 查找相关内容请先看这里。
-> Last updated: 2026-04-25 | Total pages: 13
+> Last updated: 2026-04-28 | Total pages: 19
 
 ## Entities
 
@@ -10,6 +10,9 @@
 - [[claude-code]] — Anthropic 的编码 Agent，支持长期运行与并行协作
 - [[anthropic-engineering-blog]] — Anthropic 工程博客，发布 Agent harness 实践经验
 - [[model-context-protocol]] — Anthropic 推出的 Agent 工具连接开放标准（MCP）
+- [[luo-fuli]] — 小米大模型团队负责人，访谈中提出 Agent 后训练与组织范式判断
+- [[openclaw]] — 开源 Agent 框架，通过 memory、Skills、多模型编排放大模型能力
+- [[mimo]] — 小米大模型系列，访谈中讨论其 Agent 能力追赶与 1T 基座语境
 
 ## Concepts
 
@@ -21,6 +24,12 @@
 - [[ralph-loop-philosophy]] — Geoffrey Huntley 的进化软件哲学：一切皆循环、单体架构优于微服务、软件工厂愿景
 - [[hermes-skill-implementation]] — Hermes 的 skill 实现原理：skills 索引注入、按需加载 `SKILL.md`、readiness 与 linked files
 - [[mcp-code-execution]] — Anthropic 的 MCP 代码执行模式：通过代码 API 按需调用工具，降低上下文成本
+- [[agent-post-training-paradigm]] — Agent 后训练范式：长程任务、环境复现、RL scaling 与轨迹评估
+- [[agent-framework-model-coevolution]] — Agent 框架与模型协同进化：强模型改框架，强框架放大中层模型
+
+## Summaries
+
+- [[luofuli-interview-ai-paradigm-shift]] — 罗福莉访谈深度分析：Agent 时代的模型、框架、后训练与组织重构
 
 ## Comparisons
 

@@ -139,3 +139,13 @@
 ## [2026-04-25] update | cross-links for MCP ingestion
 - Updated entities/claude-code.md to link model-context-protocol and mcp-code-execution
 - Updated entities/codex.md to add missing outbound wikilinks and relate MCP context-efficiency pattern to coding agents
+
+## [2026-04-28] ingest | 罗福莉访谈：AI范式已然巨变
+- Source: https://mp.weixin.qq.com/s/zqnJuv5OVsNGEefM7RguqQ / 张小珺Jùn｜商业访谈录 episode 138
+- Author: 张小珺、罗福莉, 2026-04-24
+- Raw saved: raw/articles/luofuli-interview-ai-paradigm-shift-2026-04-24.md
+- Summary created: summaries/luofuli-interview-ai-paradigm-shift.md
+- Web page created: assets/web/luofuli-interview-analysis.html
+- Entities created: entities/luo-fuli.md, entities/openclaw.md, entities/mimo.md
+- Concepts created: concepts/agent-post-training-paradigm.md, concepts/agent-framework-model-coevolution.md
+- Tags: agent, llm, training, tools, memory, multi-agent, evaluation, prediction
