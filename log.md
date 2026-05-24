@@ -149,3 +149,13 @@
 - Entities created: entities/luo-fuli.md, entities/openclaw.md, entities/mimo.md
 - Concepts created: concepts/agent-post-training-paradigm.md, concepts/agent-framework-model-coevolution.md
 - Tags: agent, llm, training, tools, memory, multi-agent, evaluation, prediction
+
+## [2026-05-24] ingest | Pi Coding Agent 最全面指南（完美支持/goal）
+- Source: https://x.com/i/status/2056235143623495975
+- Author: WquGuru (@wquguru), 2026-05-18
+- Raw saved: raw/articles/wquguru-pi-coding-agent-guide-2026-05-18.md
+- Entity created: entities/pi-coding-agent.md
+- Entity created: entities/ring-2.6-1t.md
+- Concept created: concepts/plan-first-workflow.md
+- Comparison created: comparisons/pi-vs-claude-code.md
+- Tags: agent, llm, tools, planning, comparison

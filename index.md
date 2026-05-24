@@ -2,7 +2,7 @@
 
 > 内容目录。每个知识页按类型归类，附一行摘要。
 > 查找相关内容请先看这里。
-> Last updated: 2026-04-28 | Total pages: 19
+> Last updated: 2026-05-24 | Total pages: 23
 
 ## Entities
 
@@ -13,6 +13,8 @@
 - [[luo-fuli]] — 小米大模型团队负责人，访谈中提出 Agent 后训练与组织范式判断
 - [[openclaw]] — 开源 Agent 框架，通过 memory、Skills、多模型编排放大模型能力
 - [[mimo]] — 小米大模型系列，访谈中讨论其 Agent 能力追赶与 1T 基座语境
+- [[pi-coding-agent]] — minimal core AI 编程代理框架，组件化设计，支持任意 OpenAI 兼容模型
+- [[ring-2.6-1t]] — InclusionAI 开源的 1T 参数大语言模型，长上下文推理
 
 ## Concepts
 
@@ -26,6 +28,7 @@
 - [[mcp-code-execution]] — Anthropic 的 MCP 代码执行模式：通过代码 API 按需调用工具，降低上下文成本
 - [[agent-post-training-paradigm]] — Agent 后训练范式：长程任务、环境复现、RL scaling 与轨迹评估
 - [[agent-framework-model-coevolution]] — Agent 框架与模型协同进化：强模型改框架，强框架放大中层模型
+- [[plan-first-workflow]] — AI Agent 工作流模式：先产计划再评审后执行，用 Skill 固化领域经验
 
 ## Summaries
 
@@ -33,7 +36,7 @@
 
 ## Comparisons
 
-<!-- 暂无条目 -->
+- [[pi-vs-claude-code]] — Pi Coding Agent vs Claude Code 全方位对比：设计哲学、能力完备性、适用场景
 
 ## Queries
 
