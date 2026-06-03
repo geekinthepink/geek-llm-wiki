@@ -2,7 +2,7 @@
 
 > 内容目录。每个知识页按类型归类，附一行摘要。
 > 查找相关内容请先看这里。
-> Last updated: 2026-05-24 | Total pages: 23
+> Last updated: 2026-06-04 | Total pages: 24
 
 ## Entities
 
@@ -29,6 +29,7 @@
 - [[agent-post-training-paradigm]] — Agent 后训练范式：长程任务、环境复现、RL scaling 与轨迹评估
 - [[agent-framework-model-coevolution]] — Agent 框架与模型协同进化：强模型改框架，强框架放大中层模型
 - [[plan-first-workflow]] — AI Agent 工作流模式：先产计划再评审后执行，用 Skill 固化领域经验
+- [[claude-code-dynamic-workflows]] — Claude Code 动态工作流：Agent 即时自写 harness，6 种编排模式（分类-行动、扇出-综合、对抗性验证、生成-过滤、锦标赛、循环直到完成），应对 Agent 惰性/自我偏好/目标漂移
 
 ## Summaries
 

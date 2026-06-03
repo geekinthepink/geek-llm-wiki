@@ -159,3 +159,15 @@
 - Concept created: concepts/plan-first-workflow.md
 - Comparison created: comparisons/pi-vs-claude-code.md
 - Tags: agent, llm, tools, planning, comparison
+
+## [2026-06-04] ingest | Claude Code Dynamic Workflows
+- Source: https://x.com/trq212/status/2061907337154367865
+- Author: Thariq Shihipar (@trq212), 2026-06-03
+- Raw saved: raw/articles/x-trq212-dynamic-workflows-claude-code-2026-06-03.md
+- Concept created: concepts/claude-code-dynamic-workflows.md (Chinese translation)
+- Tags: agent, multi-agent, tools, planning
+- Key concepts: 动态工作流（Agent 即时自写 harness）、6 种编排模式（Classify-and-act / Fan-out-and-synthesize / Adversarial verification / Generate-and-filter / Tournament / Loop until done）、失败模式（Agent 惰性 / 自我偏好偏差 / 目标漂移）、使用场景（迁移重构、深度研究、排序、分诊等）
+
+## [2026-06-04] update | index.md
+- Added 1 new concept: claude-code-dynamic-workflows
+- Updated total pages count to 24
