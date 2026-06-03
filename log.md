@@ -171,3 +171,16 @@
 ## [2026-06-04] update | index.md
 - Added 1 new concept: claude-code-dynamic-workflows
 - Updated total pages count to 24
+
+## [2026-06-04] create | concepts/claude-code-dynamic-workflows-guide.md
+- Type: tutorial
+- Source: Claude Code 官方文档 "Orchestrate subagents at scale with dynamic workflows"
+- Full Chinese translation of the official Claude Code dynamic workflows documentation page
+- Converted React components (<Note>, <Steps>, <Step>) to standard Markdown
+- Added wikilinks to [[claude-code-dynamic-workflows]], [[subagent]], [[skill]], [[agent-framework-model-coevolution]], [[plan-first-workflow]]
+- Tags: agent, multi-agent, tools, planning, tutorial
+- Sources: raw/articles/claude-code-dynamic-workflows-docs-2026-06-04.md
+
+## [2026-06-04] update | index.md
+- Added new "Tutorials" section with 1 entry: claude-code-dynamic-workflows-guide
+- Updated total pages count to 25
