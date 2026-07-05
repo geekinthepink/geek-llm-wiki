@@ -2,7 +2,7 @@
 
 > 内容目录。每个知识页按类型归类，附一行摘要。
 > 查找相关内容请先看这里。
-> Last updated: 2026-06-04 | Total pages: 25
+> Last updated: 2026-07-05 | Total pages: 26
 
 ## Entities
 
@@ -30,6 +30,7 @@
 - [[agent-framework-model-coevolution]] — Agent 框架与模型协同进化：强模型改框架，强框架放大中层模型
 - [[plan-first-workflow]] — AI Agent 工作流模式：先产计划再评审后执行，用 Skill 固化领域经验
 - [[claude-code-dynamic-workflows]] — Claude Code 动态工作流：Agent 即时自写 harness，6 种编排模式（分类-行动、扇出-综合、对抗性验证、生成-过滤、锦标赛、循环直到完成），应对 Agent 惰性/自我偏好/目标漂移
+- [[finding-unknowns]] — 发现未知领域：与AI Agent协作的方法论，四种未知类型（已知的已知/未知、未知的已知/未知），实现前中后各阶段发现技术
 
 ## Tutorials
 

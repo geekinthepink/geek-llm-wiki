@@ -184,3 +184,11 @@
 ## [2026-06-04] update | index.md
 - Added new "Tutorials" section with 1 entry: claude-code-dynamic-workflows-guide
 - Updated total pages count to 25
+
+## [2026-07-05] ingest | A Field Guide to Fable: Finding Your Unknowns
+- Source: https://x.com/trq212/status/2073100352921215386
+- Author: Thariq (@trq212), 2026-07-03
+- Raw saved: raw/articles/x-trq212-fable-unknowns-2026-07-03.md
+- Concept created: concepts/finding-unknowns.md (Chinese translation)
+- Tags: agent, planning, tutorial
+- Key concepts: 地图不是领土、四种未知类型（已知的已知/未知、未知的已知/未知）、实现前盲点扫描/头脑风暴/访谈/参考资料/实现计划、实现中实现笔记、实现后推介解释/测验
