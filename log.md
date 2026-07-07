@@ -192,3 +192,10 @@
 - Concept created: concepts/finding-unknowns.md (Chinese translation)
 - Tags: agent, planning, tutorial
 - Key concepts: 地图不是领土、四种未知类型（已知的已知/未知、未知的已知/未知）、实现前盲点扫描/头脑风暴/访谈/参考资料/实现计划、实现中实现笔记、实现后推介解释/测验
+
+## [2026-07-08] ingest | ClaudeDevs - Getting started with loops
+- Source: https://x.com/i/status/2074208949205881033
+- Author: ClaudeDevs (@ClaudeDevs), 2026-07-06
+- Concept created: concepts/claude-code-loops.md (Chinese translation)
+- Tags: agent, tools, tutorial
+- Key concepts: 四种循环类型（基于轮次/基于目标/基于时间/主动循环）、触发方式与停止条件、Token 使用管理、代码质量维护、SKILL.md 验证编码、/goal /loop /schedule 命令
